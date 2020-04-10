@@ -141,7 +141,7 @@ int che(char **av, int i, int j)
 			}
 		}
 	}
-	printf("3 res i: %d res j: %d sum: %d char: %c\n", startI, startJ, sum,  av[startI][startJ]);
+	printf("OK res i: %d res j: %d sum: %d char: %c\n", startI, startJ, sum,  av[startI][startJ]);
 	return 0;
 }
 
