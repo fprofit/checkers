@@ -21,9 +21,14 @@ int check_in(char **av){
 }
 int check_step(char **av, int i, int j, int arg)
 {
-	if(arg < 2 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B' || av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B'))
+	if((arg == 5 || arg == 1) && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B'))
 		return(1);
-	
+	else if((arg ==5 || arg == 2) && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B'))
+		return (1);
+	else if((arg >= 5  || arg == 3) && (av[i-1][-j] == 'b' || av[i-1][j-1] == 'B'))
+		return(1);
+	else if((arg >= 5 || arg == 4)  && (av[i-1][j+1] == 'b' || av[i-1][j+1] == 'B'))
+		return(1);
 	return(0);
 }
 int checkers(char **av, int i, int j, int sum, int fl)
@@ -31,16 +36,31 @@ int checkers(char **av, int i, int j, int sum, int fl)
 	
 	if(i <= 5)
 	{
-		if(fl < 2 && i <= 4 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') && av[i+2][j+2] == '.' &&
-				check_step(av, i+2, j+2, fl))
+		if(i <= 4 && j <= 4 && av[i+2][j+2] == '.' && 
+				check_step(av, i, j, 1) &&	check_step(av, i+2, j+2, 5))
 			return(sum = checkers(av, i+2, j+2, sum+1, fl));
-		else if(fl <2 && i <= 4 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.' &&
-				check_step(av, i+2, j+2, fl))			
+		else if(i <= 4 && j >= 2 && av[i+2][j-2] == '.' &&
+				 check_step(av, i+1, j-1, 2) && check_step(av, i+2, j-2, 5))			
 			return(sum = checkers(av, i+2, j-2, sum+1, fl));
-		else if(i <= 5 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B') && av[i+2][j+2] == '.')
+		else if(fl == 0 && i >= 2 && j <= 4 && av[i-2][j+2] == '.' &&
+				check_step(av, i-1, j+1, 3) &&	check_step(av, i-2, j+2, 6))			
+			return(sum = checkers(av, i-2, j+2, sum+1, fl));
+		else if(fl == 0 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
+				check_step(av, i-1, j-1, 4) &&	check_step(av, i-2, j-2, 6))		
+			return(sum = checkers(av, i-2, j-2, sum+1, fl));
+
+		else if(i <= 5 && j <= 5 && av[i+2][j+2] == '.' &&
+				check_step(av, i, j, 1))
 			return(sum = checkers(av, i+2, j+2, sum+1, fl));
-		else if(i <= 5 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.')
+		else if(i <= 5 && j >= 2 && av[i+2][j-2] &&
+				check_step(av, i, j, 2))
 			return(sum = checkers(av, i+2, j-2, sum+1, fl));
+		else if(fl == 0 && i >= 2 && j <= 5 && av[i-2][j+2] == '.' &&
+				check_step(av, i, j, 3))
+			return(sum = checkers(av, i+2, j+2, sum+1, fl));
+		else if(fl == 0 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
+				check_step(av, i, j, 4))
+			return(sum = checkers(av, i-2, j-2, sum+1, fl));
 		return(sum);
 	}
 	return(sum);
@@ -51,7 +71,7 @@ int che(char **av, int i, int j)
 	int startI;
 	int startJ;
 	int sum;
-	int temp;
+	//int temp;
 	sum = -1;
 	for(; i < 8; i++)
 	{
@@ -59,22 +79,20 @@ int che(char **av, int i, int j)
 		{
 			if(av[i][j] == 'w')
 			{
-				temp = checkers(av, i, j, 0, 1);
-				if(sum < temp)
+				if(sum < checkers(av, i, j, 0, 1))
 				{
 					startI = i;
 					startJ = j;
-					sum = temp;
+					sum = checkers(av, i, j, 0, 1);
 				}
 			}
 			if(av[i][j] == 'W')
 			{
-				temp =checkers(av, i, j, 0, 0);
-				if(sum < temp)
+				if(sum < checkers(av, i, j, 0, 0))
 				{
 					startI = i;
 					startJ = j;
-					sum = temp;
+					sum = checkers(av, i, j, 0, 0);
 				}
 			}
 		}
