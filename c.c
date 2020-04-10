@@ -19,94 +19,31 @@ int check_in(char **av){
 	}
 	return 1;
 }
-int check_step_dama(char **av, int i, int j, int sum)
+int check_step(char **av, int i, int j, int arg)
 {
-	printf("1 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-		if(i <= 4 && j <= 4 && av[i+2][j+2] == '.' &&
-			(av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') &&
-			(av[i+3][j+3] == 'b' || av[i+3][j+3] == 'B' ||
-			av[i+3][j+1] == 'b' || av[i+3][j+1] == 'B' ||
-			av[i+1][j+3] == 'b' || av[i+1][j+3] == 'B'))
-			{
-				av[i+1][j+1] = '.';
-				printf("2 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-				sum = check_step_dama(av, i+2, j+2, sum+1);
-			}
-		else if(i >= 2 && j <=4 && av[i-2][j+2] == '.' &&
-			(av[i-1][j+1] == 'b' || av[i-1][+1] == 'B') &&
-			(av[i-3][j+3] == 'b' || av[i-3][j+3] == 'B' || 
-			av[i-3][j+1] == 'b' || av[i-3][j+1] == 'B' ||
-			av[i-1][j+3] == 'b' || av[i-1][j+3] == 'B'))
-			{
-				av[i-1][j+1] = '.';
-				printf("3 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-				sum = check_step_dama(av, i-2, j+2, sum+1);
-			}
-		else if(i <= 4 && j >=2 && av[i+2][j-2] == '.' &&
-			(av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') &&
-			(av[i+3][j-1] == 'b' || av[i+3][j-1] == 'B' || 
-			av[i+3][j-3] == 'b' || av[i+3][j-3] == 'B' ||
-			av[i+1][j-3] == 'b' || av[i+1][j-3] == 'B'))
-			{
-				av[i+1][j-1] = '.';
-				printf("4 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-				sum = check_step_dama(av, i+2, j-2, sum+1);
-			}
-		else if(i >= 2 && j >=2 && av[i-2][j-2] == '.' &&
-			(av[i-1][j-1] == 'b' || av[i-1][j-1] == 'B') &&
-			(av[i-3][j-1] == 'b' || av[i-3][j-1] == 'B' || 
-			av[i-3][j-3] == 'b' || av[i-3][j-3] == 'B' ||
-			av[i-1][j-3] == 'b' || av[i-1][j-3] == 'B'))
-			{
-				av[i-1][j-1] = '.';
-				printf("5 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-				sum = check_step_dama(av, i-2, j-2, sum+1);
-			}
-		else if(i <=5 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B') && av[i+2][j+2] == '.')
-		{	av[i+1][j+1] = '.';
-			printf("6 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-			sum = check_step_dama(av, i+2, j+2, sum+1);
-		}
-		else if(i >= 2 && j <= 5 && (av[i-1][j+1] == 'b' || av[i-1][j+1] == 'B') && av[i-2][j+2] == '.')
-		{
-			av[i-1][j+1] = '.';
-			printf("7 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-			sum = check_step_dama(av, i-2, j+2, sum+1);
-		}
-		else if(i <= 5 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.')
-		{
-			av[i+1][j-1] = '.';
-			printf("8 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-			sum = check_step_dama(av, i+2, j-2, sum+1);
-		}
-		else if(i <= 2 && j >=2 && (av[i-1][j-1] == 'b' || av[i-1][j-1] == 'B') && av[i-2][j-2] == '.')
-		{
-			av[i-1][j-1] = '.';
-			printf("9 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-			sum = check_step_dama(av, i-2, j-2, sum+1);
-		}
-		else
-			return(sum);
-		return(sum);
-	}
-int check_step(char **av, int i, int j, int sum)
+	if(arg < 2 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B' || av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B'))
+		return(1);
+	
+	return(0);
+}
+int checkers(char **av, int i, int j, int sum, int fl)
 {
 	
 	if(i <= 5)
 	{
-		if(i <= 4 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') && av[i+2][j+2] == '.' &&
-			(av[i+3][j+3] == 'b' || av[i+3][j+3] == 'B' || av[i+3][j+1] == 'b' || av[i+3][j+1] == 'B'))
-			sum = check_step(av, i+2, j+2, sum+1);
-		else if(i <= 4 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.' &&
-			(av[i+3][j-1] == 'b' || av[i+3][j-1] == 'B' || av[i+3][j-3] == 'b' || av[i+3][j-3] == 'B'))
-			sum = check_step(av, i+2, j-2, sum+1);
-		else if(j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B') && av[i+2][j+2] == '.')
-			sum = check_step(av, i+2, j+2, sum+1);
-		else if(j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.')
-			sum = check_step(av, i+2, j-2, sum+1);
+		if(fl < 2 && i <= 4 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') && av[i+2][j+2] == '.' &&
+				check_step(av, i+2, j+2, fl))
+			return(sum = checkers(av, i+2, j+2, sum+1, fl));
+		else if(fl <2 && i <= 4 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.' &&
+				check_step(av, i+2, j+2, fl))			
+			return(sum = checkers(av, i+2, j-2, sum+1, fl));
+		else if(i <= 5 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B') && av[i+2][j+2] == '.')
+			return(sum = checkers(av, i+2, j+2, sum+1, fl));
+		else if(i <= 5 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.')
+			return(sum = checkers(av, i+2, j-2, sum+1, fl));
 		return(sum);
 	}
-return(sum);
+	return(sum);
 }
 
 int che(char **av, int i, int j)
@@ -122,7 +59,7 @@ int che(char **av, int i, int j)
 		{
 			if(av[i][j] == 'w')
 			{
-				temp = check_step(av, i, j, 0);
+				temp = checkers(av, i, j, 0, 1);
 				if(sum < temp)
 				{
 					startI = i;
@@ -132,7 +69,7 @@ int che(char **av, int i, int j)
 			}
 			if(av[i][j] == 'W')
 			{
-				temp = check_step_dama(av, i, j, 0);
+				temp =checkers(av, i, j, 0, 0);
 				if(sum < temp)
 				{
 					startI = i;
