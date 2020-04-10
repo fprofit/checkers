@@ -22,7 +22,7 @@ int check_in(char **av){
 int check_step_dama(char **av, int i, int j, int sum)
 {
 	printf("1 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
-		if(i <= 5 && j <= 5 && av[i+2][j+2] == '.' &&
+		if(i <= 4 && j <= 4 && av[i+2][j+2] == '.' &&
 			(av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') &&
 			(av[i+3][j+3] == 'b' || av[i+3][j+3] == 'B' ||
 			av[i+3][j+1] == 'b' || av[i+3][j+1] == 'B' ||
@@ -32,7 +32,7 @@ int check_step_dama(char **av, int i, int j, int sum)
 				printf("2 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
 				sum = check_step_dama(av, i+2, j+2, sum+1);
 			}
-		else if(i >= 2 && j <= 5 && av[i-2][j+2] == '.' &&
+		else if(i >= 2 && j <=4 && av[i-2][j+2] == '.' &&
 			(av[i-1][j+1] == 'b' || av[i-1][+1] == 'B') &&
 			(av[i-3][j+3] == 'b' || av[i-3][j+3] == 'B' || 
 			av[i-3][j+1] == 'b' || av[i-3][j+1] == 'B' ||
@@ -42,7 +42,7 @@ int check_step_dama(char **av, int i, int j, int sum)
 				printf("3 res i: %d res j: %d char: %c\n", i, j, av[i][j]);
 				sum = check_step_dama(av, i-2, j+2, sum+1);
 			}
-		else if(i <= 5 && j >=2 && av[i+2][j-2] == '.' &&
+		else if(i <= 4 && j >=2 && av[i+2][j-2] == '.' &&
 			(av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') &&
 			(av[i+3][j-1] == 'b' || av[i+3][j-1] == 'B' || 
 			av[i+3][j-3] == 'b' || av[i+3][j-3] == 'B' ||
@@ -92,11 +92,12 @@ int check_step_dama(char **av, int i, int j, int sum)
 int check_step(char **av, int i, int j, int sum)
 {
 	
-	if(i < 6){
-		if(j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') && av[i+2][j+2] == '.' &&
+	if(i <= 5)
+	{
+		if(i <= 4 && j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][+1] == 'B') && av[i+2][j+2] == '.' &&
 			(av[i+3][j+3] == 'b' || av[i+3][j+3] == 'B' || av[i+3][j+1] == 'b' || av[i+3][j+1] == 'B'))
 			sum = check_step(av, i+2, j+2, sum+1);
-		else if(j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.' &&
+		else if(i <= 4 && j >=2 && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B') && av[i+2][j-2] == '.' &&
 			(av[i+3][j-1] == 'b' || av[i+3][j-1] == 'B' || av[i+3][j-3] == 'b' || av[i+3][j-3] == 'B'))
 			sum = check_step(av, i+2, j-2, sum+1);
 		else if(j <= 5 && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B') && av[i+2][j+2] == '.')
