@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <unistd.h>
 
 int check_in(char **av){
@@ -19,51 +18,184 @@ int check_in(char **av){
 	}
 	return 1;
 }
+
 int check_step(char **av, int i, int j, int arg)
 {
-	if((arg == 5 || arg == 1) && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B'))
+	if((arg == 1 || arg >= 5) && (av[i+1][j+1] == 'b' || av[i+1][j+1] == 'B'))
 		return(1);
-	else if((arg ==5 || arg == 2) && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B'))
+	else if((arg == 2 || arg >= 5) && (av[i+1][j-1] == 'b' || av[i+1][j-1] == 'B'))
 		return (1);
-	else if((arg >= 5  || arg == 3) && (av[i-1][-j] == 'b' || av[i-1][j-1] == 'B'))
+	else if((arg == 3 || arg > 5 ) && (av[i-1][j+1] == 'b' || av[i-1][j+1] == 'B'))
 		return(1);
-	else if((arg >= 5 || arg == 4)  && (av[i-1][j+1] == 'b' || av[i-1][j+1] == 'B'))
+	else if((arg == 4 || arg > 5 )  && (av[i-1][j-1] == 'b' || av[i-1][j-1] == 'B'))
 		return(1);
 	return(0);
 }
 int checkers(char **av, int i, int j, int sum, int fl)
 {
-	
-	if(i <= 5)
-	{
 		if(i <= 4 && j <= 4 && av[i+2][j+2] == '.' && 
-				check_step(av, i, j, 1) &&	check_step(av, i+2, j+2, 5))
-			return(sum = checkers(av, i+2, j+2, sum+1, fl));
+				check_step(av, i, j, 1) && check_step(av, i+2, j+2, 5))
+			{
+				av[i+1][j+1] = '.';
+				sum = checkers(av, i+2, j+2, sum+1, fl);
+				av[i+1][j+1] = 'b';
+			}
 		else if(i <= 4 && j >= 2 && av[i+2][j-2] == '.' &&
-				 check_step(av, i+1, j-1, 2) && check_step(av, i+2, j-2, 5))			
-			return(sum = checkers(av, i+2, j-2, sum+1, fl));
-		else if(fl == 0 && i >= 2 && j <= 4 && av[i-2][j+2] == '.' &&
-				check_step(av, i-1, j+1, 3) &&	check_step(av, i-2, j+2, 6))			
-			return(sum = checkers(av, i-2, j+2, sum+1, fl));
-		else if(fl == 0 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
-				check_step(av, i-1, j-1, 4) &&	check_step(av, i-2, j-2, 6))		
-			return(sum = checkers(av, i-2, j-2, sum+1, fl));
-
+				 check_step(av, i, j, 2) && check_step(av, i+2, j-2, 5))
+			{
+				av[i+1][j-1] = '.';			
+				sum = checkers(av, i+2, j-2, sum+1, fl);
+				av[i+1][j-1] = 'b';
+			}
+		else if(fl == 1 && i >= 2 && j <= 5 && av[i-2][j+2] == '.' &&
+				check_step(av, i, j, 3) &&	check_step(av, i-2, j+2, 6))
+			{
+				av[i-1][j+1] = '.';			
+				sum = checkers(av, i-2, j+2, sum+1, fl);
+				av[i-1][j+1] = 'b';
+			}
+		else if(fl == 1 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
+				check_step(av, i, j, 4) &&	check_step(av, i-2, j-2, 6))
+			{
+				av[i-1][j-1] = '.';		
+				sum = checkers(av, i-2, j-2, sum+1, fl);
+				av[i-1][j-1] = 'b';
+			}
 		else if(i <= 5 && j <= 5 && av[i+2][j+2] == '.' &&
 				check_step(av, i, j, 1))
-			return(sum = checkers(av, i+2, j+2, sum+1, fl));
+			{
+				av[i+1][j+1] = '.';
+				sum = checkers(av, i+2, j+2, sum+1, fl);
+				av[i+1][j+1] = 'b';
+				
+			}
 		else if(i <= 5 && j >= 2 && av[i+2][j-2] &&
 				check_step(av, i, j, 2))
-			return(sum = checkers(av, i+2, j-2, sum+1, fl));
-		else if(fl == 0 && i >= 2 && j <= 5 && av[i-2][j+2] == '.' &&
+			{
+				av[i+1][j-1] = '.';			
+				sum = checkers(av, i+2, j-2, sum+1, fl);
+				av[i+1][j-1] = 'b';
+			}
+		else if(fl == 1 && i >= 2 && j <= 5 && av[i-2][j+2] == '.' &&
 				check_step(av, i, j, 3))
-			return(sum = checkers(av, i+2, j+2, sum+1, fl));
-		else if(fl == 0 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
+			{
+				av[i-1][j+1] = '.';			
+				sum = checkers(av, i-2, j+2, sum+1, fl);
+				av[i-1][j+1] = 'b';
+			}
+		else if(fl == 1 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
 				check_step(av, i, j, 4))
-			return(sum = checkers(av, i-2, j-2, sum+1, fl));
+			{
+				av[i-1][j-1] = '.';		
+				sum = checkers(av, i-2, j-2, sum+1, fl);
+				av[i-1][j-1] = 'b';
+			}
 		return(sum);
-	}
 	return(sum);
+}
+void checkers_print(char **av, int i, int j, int fl)
+{
+	char num = '1';
+	char alf = 'A';
+		if(i <= 4 && j <= 4 && av[i+2][j+2] == '.' && 
+				check_step(av, i, j, 1) && check_step(av, i+2, j+2, 5))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i+1][j+1] = '.';
+				checkers_print(av, i+2, j+2, fl);
+			}
+		else if(i <= 4 && j >= 2 && av[i+2][j-2] == '.' &&
+				 check_step(av, i, j, 2) && check_step(av, i+2, j-2, 5))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i+1][j-1] = '.';			
+				checkers_print(av, i+2, j-2, fl);
+			}
+		else if(fl == 1 && i >= 2 && j <= 4 && av[i-2][j+2] == '.' &&
+				check_step(av, i, j, 3) &&	check_step(av, i-2, j+2, 6))
+			{
+				
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i-1][j+1] = '.';			
+				checkers_print(av, i-2, j+2, fl);
+			}
+		else if(fl == 1 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
+				check_step(av, i, j, 4) &&	check_step(av, i-2, j-2, 6))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i-1][j-1] = '.';		
+				checkers_print(av, i-2, j-2, fl);
+			}
+		else if(i <= 5 && j <= 5 && av[i+2][j+2] == '.' &&
+				check_step(av, i, j, 1))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i+1][j+1] = '.';
+				checkers_print(av, i+2, j+2, fl);
+				
+			}
+		else if(i <= 5 && j >= 2 && av[i+2][j-2] &&
+				check_step(av, i, j, 2))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i+1][j-1] = '.';			
+				checkers_print(av, i+2, j-2, fl);
+			}
+		else if(fl == 1 && i >= 2 && j <= 5 && av[i-2][j+2] == '.' &&
+				check_step(av, i, j, 3))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i-1][j+1] = '.';			
+				checkers_print(av, i-2, j+2, fl);
+			}
+		else if(fl == 1 && i >= 2 && j >= 2 && av[i-2][j-2] == '.' &&
+				check_step(av, i, j, 4))
+			{
+				num = num + i;
+				alf = alf + j;
+				write(1, &alf, 1);
+				write(1, &num, 1);
+				write(1, "-", 1);
+				av[i-1][j-1] = '.';		
+				checkers_print(av, i-2, j-2, fl);
+			}
+		else
+		{
+			num = num + i;
+			alf = alf + j;
+			write(1, &alf, 1);
+			write(1, &num, 1);
+			write(1, "\n", 1);
+			av[i-1][j-1] = '.';
+		}
 }
 
 int che(char **av, int i, int j)
@@ -71,7 +203,7 @@ int che(char **av, int i, int j)
 	int startI;
 	int startJ;
 	int sum;
-	//int temp;
+	int fl;
 	sum = -1;
 	for(; i < 8; i++)
 	{
@@ -79,25 +211,28 @@ int che(char **av, int i, int j)
 		{
 			if(av[i][j] == 'w')
 			{
-				if(sum < checkers(av, i, j, 0, 1))
+				
+				if(sum < checkers(av, i, j, 0, 0))
 				{
+					fl = 0;
 					startI = i;
 					startJ = j;
-					sum = checkers(av, i, j, 0, 1);
+					sum = checkers(av, i, j, 0, fl);
 				}
 			}
 			if(av[i][j] == 'W')
 			{
-				if(sum < checkers(av, i, j, 0, 0))
+				if(sum < checkers(av, i, j, 0, 1))
 				{
+					fl = 1;
 					startI = i;
 					startJ = j;
-					sum = checkers(av, i, j, 0, 0);
+					sum = checkers(av, i, j, 0, fl);
 				}
 			}
 		}
 	}
-	printf("OK res i: %d res j: %d sum: %d char: %c\n", startI, startJ, sum,  av[startI][startJ]);
+	checkers_print(av, startI, startJ, fl);
 	return 0;
 }
 
@@ -109,7 +244,5 @@ int main(int ac, char **av)
 		return 0;
 	}
 	che(av, 0, 0);
-
-	printf("Ok\n");
 	return 0;
 }
